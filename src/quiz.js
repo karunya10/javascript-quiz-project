@@ -33,9 +33,13 @@ class Quiz {
 
   // 5. checkAnswer(answer)
   checkAnswer(answer) {
-    if (this.questions[this.currentQuestionIndex].answer === answer) {
+    const currentQuestionAnswer =
+      this.questions[this.currentQuestionIndex].answer;
+    if (currentQuestionAnswer === answer) {
       this.correctAnswers++;
+      return true;
     }
+    return false;
   }
 
   // 6. hasEnded()
