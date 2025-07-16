@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ),
     // Add more questions here
   ];
-  const quizDuration = 120; // 120 seconds (2 minutes)
+  const quizDuration = 60; // 120 seconds (2 minutes)
 
   /************  QUIZ INSTANCE  ************/
 
@@ -64,15 +64,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Display the time remaining in the time remaining container
   const timeRemainingContainer = document.getElementById("timeRemaining");
+
   timeRemainingContainer.innerText = `${minutes}:${seconds}`;
 
   // Show first question
   showQuestion();
+  showTime();
 
   /************  TIMER  ************/
+  function showTime() {
+    let timer = setInterval(() => {
+      const minutes = Math.floor(quiz.timeRemaining / 60)
+        .toString()
+        .padStart(2, "0");
+      const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
+      timeRemainingContainer.innerText = `${minutes}:${seconds}`;
+      if (quiz.timeRemaining <= 0) {
+        setTimeout(() => {
+          showResults();
+        }, 2000);
+        timeRemainingContainer.innerText = "Time's up!";
 
-  let timer;
-
+        clearInterval(timer);
+      }
+      quiz.timeRemaining--;
+    }, 1000);
+  }
   /************  EVENT LISTENERS  ************/
 
   nextButton.addEventListener("click", nextButtonHandler);
@@ -194,6 +211,8 @@ document.addEventListener("DOMContentLoaded", () => {
       quiz.correctAnswers = 0;
       quiz.shuffleQuestions();
       showQuestion();
+      quiz.timeRemaining = 120;
+      showTime();
     });
   }
 });
